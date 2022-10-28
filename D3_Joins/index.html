@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset="utf-8">
+        <title>Homework #4: D3 Joins - CSE 578 - Fall 2022</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" />
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/colorbrewer.v1.min.js"></script>
+        <script src="js/main.js"></script>
+        <style>
+        	.myContainer {
+                margin:auto;
+                width:1110px;
+            }
+        	svg {
+        	  margin-left: 50px;
+			  margin-top: 20px;
+			  margin-bottom: 20px;
+			  border: 1px solid gray;
+			  border-radius: 10px;
+			  height: 700px;
+			  width: 1000px;
+			}
+			#slider_value {
+			  margin-inline-start: 10px;
+			  width: 5%;
+			}
+
+			.main_panel_controller {
+			 
+			  margin-left: 50px;
+			  padding-inline-start: 40px;
+			  flex-direction: row;
+			  border: solid black 1px;
+			  padding-block-start: 10px;
+			  padding-block-end: 10px;
+			  border-radius: 8px;
+			  width: 90%;
+			  height: 20;
+			  display: flex;
+			  padding-inline-end: 20px;
+			  
+			}
+
+			.play_button_control {
+			  height: 20;
+			  border: solid black 1px;
+			  border-radius: 8px;
+			  margin-left: 50px;
+			  padding-block-start: 10px;
+			  padding-block-end: 10px;
+			  padding-inline-start: 10px;
+			  width: 90%;
+			  display: flex;
+			  flex-direction: row;
+			  padding-inline-end: 10px;
+			}
+
+			#css_slider {
+			  width: 90%;
+			}
+
+			html {
+			  font-family: "Trebuchet MS", sans-serif;
+			}
+
+			#checkboxes {
+		      display: none;
+		      border: 1px #dadada solid;
+		    }
+
+		    #checkboxes label {
+		      display: block;
+		    }
+
+			.multiselect {
+		      width: 200px;
+		    }
+
+		    .selectBox {
+		      position: relative;
+		    }
+
+			#slider_value{
+			  width: 60px;
+			}
+
+			.panel_control{
+			  flex:1;
+			}
+
+			select:invalid{
+		        color: gray;
+		    }
+		    option{
+		        color: black;
+		    }
+		
+		    .selectBox select {
+		      width: 100%;
+		      font-weight: bold;
+		    }
+
+		    .overSelect {
+		      position: absolute;
+		      left: 0;
+		      right: 0;
+		      top: 0;
+		      bottom: 0;
+		    }
+
+		    #checkboxes label:hover {
+		      background-color: #1e90ff;
+		    }
+
+        </style>
+
+	</head>
+
+	<body>
+		<div class="myContainer">
+			<h1 class="text-center">Homework #4: D3 Joins</h1>
+            <h3 class="text-center">Prathmesh Sambrekar - psambrek@asu.edu</h3>
+            <hr>
+            <div class='main_panel_controller'>
+		    <div class='panel_control'>
+		      <label>Global Indicator : </label>&nbsp;&nbsp;
+		      <select id='global_indicator'  autocomplete="off"  onchange="global_indicator(this.value)">
+		        <option value='Data.Health.Birth Rate' selected>Birth Rate</option>
+		        <option value='Data.Health.Death Rate'>Death Rate</option>
+		        <option value='Data.Health.Fertility Rate'>Fertility Rate</option>
+		        <option value='Data.Health.Life Expectancy at Birth, Total'>Total Life Expectancy at Birth</option>
+		        <option value='Data.Urban Development.Urban Population Percent'>Urban Population Percent</option>
+		        <option value='Data.Rural Development.Agricultural Land'>Agricultural Land</option>
+		        <option value='Data.Urban Development.Population Density'>Population Density</option>
+		        <option value='Data.Rural Development.Rural Population'>Rural Population</option>
+		        <option value='Data.Health.Life Expectancy at Birth, Female'>Female Life Expectancy at Birth</option>
+		        <option value='Data.Health.Life Expectancy at Birth, Male'>Male Life Expectancy at Birth</option>
+		      </select>&nbsp;&nbsp;
+		    </div>
+		    <div class='panel_control'>
+		    	<label>Opacity : </label>&nbsp;&nbsp;
+		    	<span class="leftlabel">20</span>
+		        <input id ="range1" type="range" min="20" max="90" value="90" style="width: 100px; margin-right: 5px;"/>
+		        <span class="rightlabel">90</span>
+		    </div>
+		    <div class='panel_control'>
+		      <label>Regions : </label>&nbsp;&nbsp;
+		      <div class="multiselect">
+		      <div class="selectBox" onclick="showCheckboxes()">
+		        <select>
+		          <option>Select an option</option>
+		        </select>
+		        <div class="overSelect"></div>
+		      </div>
+		      <div id="checkboxes">
+		      	<input type="checkbox" id="South Asia" class="checkbox" value="South Asia">
+		        <label for="South Asia">South Asia</label>
+		        
+		        <input type="checkbox" id="Middle East & North Africa" class="checkbox" value="Middle East & North Africa">
+		        <label for="Middle East & North Africa">Middle East & North Africa</label>  
+
+		        <input type="checkbox" id="East Asia & Pacific" class="checkbox" value="East Asia & Pacific">
+		        <label for="East Asia & Pacific">East Asia & Pacific</label>  
+
+		        <input type="checkbox" id="Europe & Central Asia" class="checkbox" value="Europe & Central Asia">
+		        <label for="Europe & Central Asia">Europe & Central Asia</label>
+
+		        <input type="checkbox" id="Latin America & Caribbean" class="checkbox" value="Latin America & Caribbean">
+		        <label for="Latin America & Caribbean">Latin America & Caribbean</label>
+
+		        <input type="checkbox" id="Sub-Saharan Africa" class="checkbox" value="Sub-Saharan Africa">
+		        <label for="Sub-Saharan Africa">Sub-Saharan Africa</label>
+
+		        <input type="checkbox" id="North America" class="checkbox" value="North America">
+		        <label for="North America">North America</label>
+
+		      </div>
+		    </div>
+		    </div>
+
+		    <div class='panel_control'>
+		    	<button type="button" onclick="plot_data();">Plot Data</button>
+		    </div>
+
+		    </div>
+
+		    <div class='play_button_control'>
+		        <button id="play_pause" type="button" onclick="Animation(this);">Play</button>&nbsp;&nbsp;
+		        <input id="css_slider" type="range" min="1960" max="2013" value="2000" autocomplete="off">&nbsp;&nbsp;
+		        <input id="slider_value" type="slider_value" value="2000" autocomplete="off">
+	      	</div>
+	      	
+	      	<div id="my_dataviz"></div>
+
+		</div>
+
+
+	</body>
+</html>
